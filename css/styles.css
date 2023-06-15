@@ -16,7 +16,7 @@ html, body {
 
 .container {
 	display: grid;
-	grid-template: 20% 80% / 70%;
+	grid-template: 15% 85% / 70%;
 	height: 100%;
 	justify-content: center;
 }
@@ -28,9 +28,9 @@ html, body {
 
 .game {
 	display: grid;
-	grid-template: repeat(2, 1fr);
+	grid-template: repeat(4, 1fr);
 	justify-content: center;
-	padding-top: 50px;
+	padding-top: 20px;
 }
 
 .btn {
@@ -43,6 +43,24 @@ html, body {
 
 .btn:active {
 	background-color: #3f3f46;
+}
+
+.score {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	background-color: #18181b;
+	justify-content: center;
+	align-items: center;
+	padding: 10px 50px 10px 50px;
+	grid-gap: 40px;;
+}
+
+.score>div {
+	border: 2px solid #7f1d1d;
+	padding: 5px;
+	border-radius: 10px;
+	font-family: sans-serif;
+	font-size: 20px;
 }
 
 .board {
