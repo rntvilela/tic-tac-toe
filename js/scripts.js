@@ -5,7 +5,8 @@ const Gameboard = {
 	x : 0,
 	o : 0,
 	turn : false,
-	mode : false
+	mode : false,
+	move : 0
 }
 
 const clearboard = () => {
@@ -37,11 +38,27 @@ const updatescore = (op, value) => {
 	}
 }
 
-const restart = () => {
+const display = (msg) => {
+	const board = document.querySelector('.board');
+	const result = document.querySelector('.result');
+
+	board.style.display = "none";
+	result.style.display = "flex";
+
+	result.textContent = msg;
+	
+	setTimeout( () => {
+		board.style.display = "grid";
+		result.style.display = "none";
+	}, 2000);
+}
+
+const restart = (score) => {
 	Gameboard.turn = false;
 	Gameboard.mode = false;
+	Gameboard.move = 0;
 	Gameboard.board = ["", "", "", "", "", "", "", "", ""];
-	updatescore(0, 0);
+	if (score) updatescore(0, 0);
 	clearboard();
 }
 
@@ -78,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	rst_btn.addEventListener('click', () => {
-		restart();
+		restart(1);
 	});
 	
 
@@ -92,11 +109,23 @@ document.addEventListener('DOMContentLoaded', () => {
 				Gameboard.board[i] = mark;
 				cells[i].textContent = Gameboard.board[i];
 				Gameboard.turn = !Gameboard.turn;
-				if (checkwin()) {
-					if (Gameboard.turn) updatescore(1, Gameboard.x + 1);
-					else updatescore(2, Gameboard.o + 1); 
-					Gameboard.turn = false;
-					clearboard();
+				Gameboard.move++;
+				if (Gameboard.move >= 5) {
+					if (checkwin()) {
+						if (Gameboard.turn) {
+							updatescore(1, Gameboard.x + 1);
+							display("X wins!");
+							restart();
+						}
+						else {
+							updatescore(2, Gameboard.o + 1);
+							display("O wins!");
+							restart();
+						}
+					} else if (Gameboard.move == 9) {
+						display("It's a tie!");
+						restart();
+					}
 				}
 			}
 		});

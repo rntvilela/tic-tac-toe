@@ -73,6 +73,20 @@ html, body {
 	box-shadow: 0px 2px 5px #450a0a;
 }
 
+.result {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	height: 300px;
+	width: 300px;
+	font-family: sans-serif;
+	font-size: 60px;
+	font-weight: bold;
+	padding: 50px 250px 50px 250px;
+	background-color: #7f1d1d;
+	box-shadow: 0px 2px 5px #450a0a;
+}
+
 .cell {
 	display: flex;
 	justify-content: center;
