@@ -40,28 +40,54 @@ const Tictactoe = {
 	display : (msg) => {
 		const board = document.querySelector('.board');
 		const result = document.querySelector('.result');
-
-		board.style.display = "none";
-		result.style.display = "flex";
+	
+		setTimeout( () => {
+			board.style.display = "none";
+			result.style.display = "flex";
+		}, 500);
 
 		result.textContent = msg;
 
 		setTimeout( () => {
 			board.style.display = "grid";
 			result.style.display = "none";
+			Tictactoe.restart();
 		}, 1500);
 	},
 
 	restart : (score) => {
 		Tictactoe.turn = false;
-		Tictactoe.mode = false;
 		Tictactoe.move = 0;
 		Tictactoe.board = ["", "", "", "", "", "", "", "", ""];
-		if (score) Tictactoe.updatescore(0, 0);
+		if (score) {
+			Tictactoe.updatescore(0, 0);
+			Tictactoe.mode = false;
+		}
 		Tictactoe.clearboard();
 	},
 
 	checkwin : () => {
+		if (Tictactoe.move >= 5) {
+			if (Tictactoe.win()) {
+				if (Tictactoe.turn) {
+					Tictactoe.updatescore(1, Tictactoe.x + 1);
+					Tictactoe.display("X wins!");
+					return true;
+				}
+				else {
+					Tictactoe.updatescore(2, Tictactoe.o + 1);
+					Tictactoe.display("O wins!");
+					return true;
+				}
+			} else if (Tictactoe.move == 9) {
+				Tictactoe.display("It's a tie!");
+				return true;
+			}
+		}
+		return false;
+	},
+
+	win : () => {
 		for (let i = 0; i < 9; i+=3) {
 			if (Tictactoe.board[i] && ((Tictactoe.board[i] === Tictactoe.board[i + 1]) && (Tictactoe.board[i] === Tictactoe.board[i + 2]))) return true;
 		}	
@@ -78,10 +104,11 @@ const Tictactoe = {
 	},
 
 	ia : () => {
-		i = parseInt(Math.random() * 9);
+		let i = parseInt(Math.random() * 9);
 
-		while
+		while (Tictactoe.board[i]) i = parseInt(Math.random() * 9);
 
+		return i;
 	}
 }
 
@@ -108,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 	let mark;
+	let ia_move;
 	for (let i = 0; i < cells.length; i++) {
 		cells[i].addEventListener('click', () => {
 			if (!Tictactoe.turn) mark = "X";
@@ -116,28 +144,21 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (!Tictactoe.board[i]) {
 				Tictactoe.board[i] = mark;
 				cells[i].textContent = Tictactoe.board[i];
-				Tictactoe.turn = !Tictactoe.turn;
 				Tictactoe.move++;
-				if (Tictactoe.move >= 5) {
-					if (Tictactoe.checkwin()) {
-						if (Tictactoe.turn) {
-							Tictactoe.updatescore(1, Tictactoe.x + 1);
-							Tictactoe.display("X wins!");
-							Tictactoe.restart();
-						}
-						else {
-							Tictactoe.updatescore(2, Tictactoe.o + 1);
-							Tictactoe.display("O wins!");
-							Tictactoe.restart();
-						}
-					} else if (Tictactoe.move == 9) {
-						Tictactoe.display("It's a tie!");
-						Tictactoe.restart();
-					}
-				}
+				Tictactoe.turn = !Tictactoe.turn;
+				
+				if (Tictactoe.checkwin()) return;	
 
 				if (Tictactoe.mode) {
-					Tictactoe.ia();
+					ia_move = Tictactoe.ia();
+					if (!Tictactoe.turn) mark = "X";
+					else mark = "O";
+				
+					Tictactoe.board[ia_move] = mark;
+					cells[ia_move].textContent = Tictactoe.board[ia_move];
+					Tictactoe.move++;
+					Tictactoe.turn = !Tictactoe.turn;
+					if (Tictactoe.checkwin()) return;	
 				}
 			}
 		});
