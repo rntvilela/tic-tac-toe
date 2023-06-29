@@ -5,6 +5,8 @@ const tictactoe = {
 	turn : false,
 	mode : false,
 	move : 0,
+	play_as : 'x',
+	ia_level: 'easy',
 
 	clear_board : function() {
 		const cells = document.querySelectorAll('.cell');
@@ -17,6 +19,7 @@ const tictactoe = {
 
 	player_action : function(i) {
 		const cells = document.querySelectorAll('.cell');
+		let mark;
 
 		if (!this.turn) mark = 'X';
 		else mark = 'O';
@@ -110,6 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	const rst_btn = document.getElementById('restart');
 	const pvp_btn = document.getElementById('pvp');
 	const pva_btn = document.getElementById('pva');
+	
+	const as_x = document.getElementById('asx');
+	const level = document.querySelectorAll('input[name="diff"]');	
 
 	pvp_btn.addEventListener('click', () => {
 		tictactoe.mode = false;
@@ -117,15 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	pva_btn.addEventListener('click', () => {
 		tictactoe.mode = true;
+		if (as_x.checked) tictactoe.play_as = 'x';
+		else tictactoe.play_as = 'o';
+		level.forEach(lvl => {
+			if (lvl.checked) tictactoe.ia_level = lvl.value;
+		});
 	});
 
 	rst_btn.addEventListener('click', () => {
 		tictactoe.restart(true);
 	});
 
-
-	let mark;
-	let ia_move;
 	for (let i = 0; i < cells.length; i++) {
 		cells[i].addEventListener('click', () => {
 
@@ -141,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 
 				if (tictactoe.mode) {
-					ia_move = tictactoe.get_ia_move();
+					let ia_move = tictactoe.get_ia_move();
 					tictactoe.player_action(ia_move);
 					
 					let result = tictactoe.get_result();

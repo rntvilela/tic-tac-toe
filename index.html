@@ -14,9 +14,22 @@
 			</div>
 			<div class="game">
 				<div class="mode">
-					<div>Mode:</div>
 					<div id="pvp" class="btn">Player VS Player</div>
-					<div id="pva" class="btn">Player VS IA</div>
+					<div>
+						<div id="pva" class="btn">Player VS IA</div>
+						<div>Play as:</div>
+						<input type="radio" id="asx" name="playas" value="as_x" checked>
+						<label for="asx">X</label>
+						<input type="radio" id="aso" name="playas" value="as_o">
+						<label for="aso">O</label><br>
+						<div>Level:</div>
+						<input type="radio" id="easy" name="diff" value="easy" checked>
+						<label for="easy">Easy</label>
+						<input type="radio" id="med" name="diff" value="medium">
+						<label for="med">Medium</label>
+						<input type="radio" id="hard" name="diff" value="hard">
+						<label for="hard">Hard</label><br>
+					</div>
 				</div>
 				<div class="score">
 					<div id="x-score">X - 0</div>
