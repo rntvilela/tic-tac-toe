@@ -19,12 +19,10 @@ const tictactoe = {
 
 	player_action : function(i) {
 		const cells = document.querySelectorAll('.cell');
-		let mark;
 
-		if (!this.turn) mark = 'X';
-		else mark = 'O';
+		if (!this.turn) mark = this.board[i] = 'X';
+		else this.board[i] = 'O';
 
-		this.board[i] = mark;
 		cells[i].textContent = this.board[i];
 		this.move++;
 		this.turn = !this.turn;
@@ -61,13 +59,13 @@ const tictactoe = {
 			board.style.display = 'grid';
 			result.style.display = 'none';
 			tictactoe.restart();
+			if (tictactoe.play_as === 'o' && tictactoe.mode) tictactoe.player_action(tictactoe.get_ia_move());
 		}, 1500);
 	},
 
 	restart : function(full) {
 		this.turn = false;
 		this.move = 0;
-		this.board = ['', '', '', '', '', '', '', '', ''];
 		if (full) {
 			this.update_score();
 			this.mode = false;
@@ -105,6 +103,10 @@ const tictactoe = {
 
 		return i;
 	}
+
+	minmax : function() {
+		// TODO
+	}
 }
 
 
@@ -118,16 +120,20 @@ document.addEventListener('DOMContentLoaded', () => {
 	const level = document.querySelectorAll('input[name="diff"]');	
 
 	pvp_btn.addEventListener('click', () => {
+		tictactoe.restart(true);
 		tictactoe.mode = false;
 	});
 
 	pva_btn.addEventListener('click', () => {
+		tictactoe.restart(true);
 		tictactoe.mode = true;
 		if (as_x.checked) tictactoe.play_as = 'x';
 		else tictactoe.play_as = 'o';
 		level.forEach(lvl => {
 			if (lvl.checked) tictactoe.ia_level = lvl.value;
 		});
+
+		if (tictactoe.play_as === 'o' && tictactoe.mode) tictactoe.player_action(tictactoe.get_ia_move());
 	});
 
 	rst_btn.addEventListener('click', () => {
@@ -149,8 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 
 				if (tictactoe.mode) {
-					let ia_move = tictactoe.get_ia_move();
-					tictactoe.player_action(ia_move);
+					tictactoe.player_action(tictactoe.get_ia_move());
 					
 					let result = tictactoe.get_result();
 					if (result) { 
