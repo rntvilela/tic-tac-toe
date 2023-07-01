@@ -97,13 +97,15 @@ const tictactoe = {
 	},
 
 	get_ia_move : function() {
-		//let i = parseInt(Math.random() * 9);
 
-		//while (this.board[i]) i = parseInt(Math.random() * 9);
-
-		//return i;
+		let rd_i = parseInt(Math.random() * 9);
+		while (this.board[rd_i]) rd_i = parseInt(Math.random() * 9);
 		
-		return this.minimax()[1];
+		let [minimax_value, minimax_i] = this.minimax();
+
+		if (this.ia_level == 'hard') return minimax_i;
+		else if (this.ia_level == 'medium') return (Math.random() < 0.8)? minimax_i : rd_i; 
+		else return (Math.random() < 0.6)? minimax_i : rd_i; 
 	},
 
 	minimax : function() {
@@ -118,17 +120,17 @@ const tictactoe = {
 			else return [0, best_move];	
 		}
 
-		if (this.turn) {
+		if (!this.turn) {
 			value = -Infinity;
 			
 			for (let i = 0; i < this.board.length; i++) {
 				if (!this.board[i]) {
-					this.board[i] = 'x';
+					this.board[i] = 'X';
 					this.turn = !this.turn;
 					this.move++;
-					let [minimaxValue, _] = this.minimax();
-					if (minimaxValue > value) {
-						value = minimaxValue;
+					let [minimax_value, _] = this.minimax();
+					if (minimax_value > value) {
+						value = minimax_value;
 						best_move = i;
 					}				
 					this.board[i] = '';
@@ -145,12 +147,12 @@ const tictactoe = {
 			
 			for (let i = 0; i < this.board.length; i++) {
 				if (!this.board[i]) {
-					this.board[i] = 'o';
+					this.board[i] = 'O';
 					this.turn = !this.turn;
 					this.move++;
-					let [minimaxValue, _] = this.minimax();
-					if (minimaxValue < value) {
-						value = minimaxValue;
+					let [minimax_value, _] = this.minimax();
+					if (minimax_value < value) {
+						value = minimax_value;
 						best_move = i;
 					}				
 					this.board[i] = '';
