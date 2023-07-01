@@ -97,15 +97,69 @@ const tictactoe = {
 	},
 
 	get_ia_move : function() {
-		let i = parseInt(Math.random() * 9);
+		//let i = parseInt(Math.random() * 9);
 
-		while (this.board[i]) i = parseInt(Math.random() * 9);
+		//while (this.board[i]) i = parseInt(Math.random() * 9);
 
-		return i;
-	}
+		//return i;
+		
+		return this.minimax()[1];
+	},
 
-	minmax : function() {
-		// TODO
+	minimax : function() {
+
+		let best_move;
+		let value;
+		let result = this.get_result();
+
+		if (result) { 
+			if (result === 'X wins!') return [1, best_move];
+			else if (result === 'O wins!') return [-1, best_move];
+			else return [0, best_move];	
+		}
+
+		if (this.turn) {
+			value = -Infinity;
+			
+			for (let i = 0; i < this.board.length; i++) {
+				if (!this.board[i]) {
+					this.board[i] = 'x';
+					this.turn = !this.turn;
+					this.move++;
+					let [minimaxValue, _] = this.minimax();
+					if (minimaxValue > value) {
+						value = minimaxValue;
+						best_move = i;
+					}				
+					this.board[i] = '';
+					this.turn = !this.turn;
+					this.move--;
+				}
+			}
+
+			return [value, best_move];
+		}
+
+		else {
+			value = Infinity;
+			
+			for (let i = 0; i < this.board.length; i++) {
+				if (!this.board[i]) {
+					this.board[i] = 'o';
+					this.turn = !this.turn;
+					this.move++;
+					let [minimaxValue, _] = this.minimax();
+					if (minimaxValue < value) {
+						value = minimaxValue;
+						best_move = i;
+					}				
+					this.board[i] = '';
+					this.turn = !this.turn;
+					this.move--;
+				}
+			}
+			return [value, best_move];
+		}
 	}
 }
 
