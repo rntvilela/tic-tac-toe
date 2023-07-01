@@ -20,7 +20,7 @@ const tictactoe = {
 	player_action : function(i) {
 		const cells = document.querySelectorAll('.cell');
 
-		if (!this.turn) mark = this.board[i] = 'X';
+		if (!this.turn) this.board[i] = 'X';
 		else this.board[i] = 'O';
 
 		cells[i].textContent = this.board[i];
